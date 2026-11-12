@@ -1,10 +1,11 @@
 import { useMutation } from "@tanstack/react-query"
+import { AXIOS } from "../services";
 
 export const useLogin = () => {
     return useMutation({
         mutationFn: async (dados) => {
-            const response = await AXIOS.post("/Login", dados);
+            const res = await AXIOS.post("/Login", dados);
             return res.data;
         }
     })
-} 
+}

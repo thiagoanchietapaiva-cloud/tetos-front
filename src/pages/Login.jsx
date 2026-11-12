@@ -1,61 +1,69 @@
-import { Button, Form, Input, Typography } from "antd";
+import { App, Button, Form, Input } from "antd";
 import { useLogin } from "../hooks/usuarioHooks";
+import { useNavigate } from "react-router";
+
 
 const Login = () => {
 
-    const {mutate: login, isPending: loginPending} = useLogin();
-    
-    function logar(dados){
-        login(dados, {
-            onSuccess: (res) => {
-                alert(res.description)
-            }
-        })
-    }
+    const navigate = useNavigate();
+    const { notification } = App.useApp();
+    const { mutate: login, isPending: loginPending } = useLogin();
 
-    return ( 
-    <div className="h-screen flex justify-center items-center relative overflow-hidden bg-blue-950/60 backdrop-blur-md">
-        
-        <div className="relative z-10 w-95 p-4 bg-white rounded-2xl shadow-2xl">
+    function logar(dados) {
+        login(dados, {
+            onSuccess: ({type, description, usuario, token}) => {
+                notification[type]({
+                    description
+                });
+                if(type == "success"){
+                    sessionStorage.setItem("token", token);
+                    sessionStorage.setItem("usuario", JSON.stringify(usuario));
+                    navigate("/home");
+                }        
+            },
+            onError: ({ response: { data: { type, description} } }) => {
+                notification[type]({
+                    description
+                });
+            }
             
-         <Form
-         onFinish={logar}
-         >
-            <Form.Item
-            label="Email"
-            name={"email"}
-            rules={[{ required: true,message: "Por favor, insira seu email!" }]}
-            >
-                <Input placeholder="Digite seu email"/>
-            </Form.Item>
-            <Form.Item
-            label="Senha"
-            name={"password"}
-            rules={[{ required: true,message: "Por favor, insira sua senha!" }]}
-            >
-                <Input placeholder="**********"/>
-                
-            </Form.Item>
-            <Button 
-            className="w-full mt-4" 
-            type="primary" 
-            htmlType="submit">
-                 Entrar
-            </Button>
-            <div className="text-center mt-4">
-                <Typography.Text>
-                    Não tem uma conta?{" "}
-                    <Typography.Link href="">
-                        Cadastre-se
-                    </Typography.Link>
-                </Typography.Text>
+        })
+
+    }
+    return (
+        <div className="h-screen flex justify-center items-center relative overflow-hidden bg-blue-950/60 backdrop-blur-md">
+
+            <div className="relative z-10 w-95 p-4 bg-white rounded-2xl shadow-2xl">
+
+                <Form
+                    onFinish={logar}
+                >
+                    <Form.Item
+                        label="Email"
+                        name={"email"}
+                        rules={[{ required: true, message: "Por favor, insira seu email!" }]}
+                    >
+                        <Input placeholder="Digite seu email" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Senha"
+                        name={"senha"}
+                        rules={[{ required: true, message: "Por favor, insira sua senha!" }]}
+                    >
+                        <Input placeholder="**********" />
+
+                    </Form.Item>
+                     <Button
+                        type="primary"
+                        htmlType="submit"
+                        className="w-full mt-4"
+                        loading={loginPending}
+                    >Enviar</Button>
+                </Form>
             </div>
-            
-         </Form>
         </div>
-    </div> 
-        
+
     );
 }
- 
+
 export default Login;         
