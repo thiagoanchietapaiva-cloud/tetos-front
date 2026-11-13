@@ -11,22 +11,20 @@ const Login = () => {
 
     function logar(dados) {
         login(dados, {
-            onSuccess: ({type, description, usuario, token}) => {
-                notification[type]({
-                    description
-                });
-                if(type == "success"){
+            onSuccess: ({ type, description, usuario, token }) => {
+                notification[type]({ description });
+                if (token) {
                     sessionStorage.setItem("token", token);
                     sessionStorage.setItem("usuario", JSON.stringify(usuario));
-                    navigate("/home");
-                }        
+                    navigate("/painel");
+                }
             },
-            onError: ({ response: { data: { type, description} } }) => {
+            onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
                 });
             }
-            
+
         })
 
     }
@@ -53,7 +51,7 @@ const Login = () => {
                         <Input placeholder="**********" />
 
                     </Form.Item>
-                     <Button
+                    <Button
                         type="primary"
                         htmlType="submit"
                         className="w-full mt-4"
