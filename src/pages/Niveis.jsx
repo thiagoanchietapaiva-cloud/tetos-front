@@ -1,19 +1,42 @@
 import { App, Button, Drawer, Form, Popconfirm, Table } from "antd";
-import { LuPencil, LuPlus, LuTrash } from "react-icons/lu";
-import { useBuscarNiveis, useCriarNivel } from "../hooks/niveisHooks";
+import { LuLayers, LuPencil, LuPlus, LuTrash } from "react-icons/lu";
+import { useBuscarNiveis, useCriarNivel, useDeletarNivel, useEditarNivel } from "../hooks/niveisHooks";
 import { useState } from "react";
 
 const Niveis = () => {
 
-    const [ monstrarCriar, setMostrarCriar ] = useState(false);
-    const { notification } = App.useApp ();
+    const [monstrarCriar, setMostrarCriar] = useState(false);
+    const { notification } = App.useApp();
     const { data: niveis, isLoading: loadingNiveis } = useBuscarNiveis();
     const { mutate: criarNivel, isLoading: loadingCriar } = useCriarNivel();
+    const { mutate: deletarNivel } = useDeletarNivel();
+    const { mutate: editarNivel, isLoading: loadingEditar } = useEditarNivel();
+    const [monstrarEditar, setMostrarEditar] = useState(false);
+    const [nivelParaEditar, setNivelParaEditar] = useState(null);
+    const [formEditar] = Form.useForm();
 
-    function criar(dados){
+    function criar(dados) {
         criarNivel(dados, {
-            onSuccess: ({ type, description }) =>{
+            onSuccess: ({ type, description }) => {
                 setMostrarCriar(false);
+                notification[type]({
+                    description,
+                    placement: "bottonRight"
+                })
+            },
+            onError: ({ response: { data: { type, description } } }) => {
+                notification[type]({
+                    description
+                });
+            }
+        })
+    }
+    function editar(dados){
+        if (!nivelParaEditar) return;
+        editarNivel({ id: nivelParaEditar.id, ...dados }, {
+            onSuccess: ({ type, description }) =>{
+                setMostrarEditar(false);
+                setNivelParaEditar(null);
                 notification[type]({
                     description,
                     placement:"bottonRight"
@@ -27,10 +50,33 @@ const Niveis = () => {
         })
     }
 
+    function abrirEditar(linha){
+        setNivelParaEditar(linha);
+        formEditar.setFieldsValue({ nome: linha.nome });
+        setMostrarEditar(true);
+    }
+
+    function deletar(id) {
+        deletarNivel(id, {
+            onSuccess: ({ type, description }) => {
+                notification[type]({
+                    description,
+                    placement: "bottonRight"
+                })
+            },
+            onError: ({ response: { data: { type, description } } }) => {
+                notification[type]({
+                    description
+                });
+            }
+        })
+    }
+
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-3xl font-bold">Níveis</h2>
+                
+                <h2 className="text-3xl font-bold flex gap-2 items-center text-blue-900"><LuLayers />Níveis</h2>
                 <Button
                     type="primary"
                     icon={<LuPlus />}
@@ -55,12 +101,14 @@ const Niveis = () => {
                             <div className="flex gap-2">
                                 <Button
                                     icon={<LuPencil />}
+                                    onClick={() => abrirEditar(linha)}
                                 />
                                 <Popconfirm
                                     title="Aviso"
                                     description="Deseja realmente apagar nivel?"
                                     okText="Sim"
                                     cancelText="Não"
+                                    onConfirm={() => deletar(linha.id)}
                                 >
                                     <Button
                                         icon={<LuTrash />}
@@ -96,6 +144,38 @@ const Niveis = () => {
                             type="primary"
                             htmlType="submit"
                             loading={loadingCriar}
+                        >
+                            Enviar
+                        </Button>
+                    </div>
+
+                </Form>
+
+            </Drawer>
+
+            <Drawer
+                title="Editar"
+                open={monstrarEditar}
+                onClose={() => setMostrarEditar(false)}
+            >
+                <Form
+                    form={formEditar}
+                    layout="vertical"
+                    onFinish={editar}
+                >
+                    <Form.Item
+                        label="Nome"
+                        name="nome"
+                        rules={[{ required: true, message: "Campo Obrigatorio" }]}
+                    >
+                        <input placeholder="nome do nivel" />
+
+                    </Form.Item>
+                    <div className="flex justify-end">
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={loadingEditar}
                         >
                             Enviar
                         </Button>
