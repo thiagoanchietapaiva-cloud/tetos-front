@@ -1,6 +1,8 @@
 import { App, Button, Form, Input } from "antd";
 import { useLogin } from "../hooks/usuarioHooks";
 import { useNavigate } from "react-router";
+import { useContext } from "react";
+import { AdminContext } from "../contexts/AdminProvider";
 
 
 const Login = () => {
@@ -8,12 +10,14 @@ const Login = () => {
     const navigate = useNavigate();
     const { notification } = App.useApp();
     const { mutate: login, isPending: loginPending } = useLogin();
+    const { setToken } = useContext(AdminContext);
 
     function logar(dados) {
         login(dados, {
             onSuccess: ({ type, description, usuario, token }) => {
                 notification[type]({ description });
-                if (token) {
+                if (type == "success") {
+                    setToken(token);
                     sessionStorage.setItem("token", token);
                     sessionStorage.setItem("usuario", JSON.stringify(usuario));
                     navigate("/painel");

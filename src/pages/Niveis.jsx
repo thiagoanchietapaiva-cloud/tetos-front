@@ -31,6 +31,7 @@ const Niveis = () => {
             }
         })
     }
+
     function editar(dados){
         if (!nivelParaEditar) return;
         editarNivel({ id: nivelParaEditar.id, ...dados }, {
@@ -84,6 +85,7 @@ const Niveis = () => {
                 >Novo Nível
                 </Button>
             </div>
+            
             <div >
                 <Table
                     dataSource={niveis || []}

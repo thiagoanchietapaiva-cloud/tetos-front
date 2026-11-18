@@ -1,10 +1,11 @@
-import { Navigate, useNavigate } from "react-router";
+import { Navigate } from "react-router";
 import { AXIOS } from "../services";
+import { useContext } from "react";
+import { AdminContext } from "../contexts/AdminProvider";
 
 const RotaProtegida = ({ children }) => {
 
-    const token = sessionStorage.getItem("token");
-    const navigate = useNavigate();
+    const { token, logout } = useContext(AdminContext);
 
     AXIOS.interceptors.request.use(
         function (config) {
@@ -27,7 +28,7 @@ const RotaProtegida = ({ children }) => {
             // Any status codes that falls outside the range of 2xx cause this function to trigger
             // Do something with response error
             if(error.status == 401){
-                navigate("/");
+                logout();
             }
             return Promise.reject(error);
         }
