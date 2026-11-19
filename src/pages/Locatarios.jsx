@@ -14,16 +14,19 @@ const Locatarios = () => {
     const [monstrarEditar, setMostrarEditar] = useState(false);
     const [locatarioParaEditar, setLocatarioParaEditar] = useState(null);
     const [formEditar] = Form.useForm();
+    const [ formCriar ] = Form.useForm();
 
     function criar(dados) {
         criarLocatarios(dados, {
             onSuccess: ({ type, description }) => {
                 setMostrarCriar(false);
+                formCriar.resetFields();
                 notification[type]({
                     description,
                     placement: "bottonRight"
                 })
             },
+
             onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
@@ -43,6 +46,7 @@ const Locatarios = () => {
                     placement: "bottonRight"
                 })
             },
+
             onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
@@ -69,6 +73,7 @@ const Locatarios = () => {
                     placement: "bottonRight"
                 })
             },
+
             onError: ({ response: { data: { type, description } } }) => {
                 notification[type]({
                     description
@@ -79,7 +84,7 @@ const Locatarios = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-4 flex-wrap">
 
                 <h2 className="text-3xl font-bold flex gap-2 items-center text-blue-900"><LuLayers />Locatários</h2>
                 <Button
@@ -90,11 +95,12 @@ const Locatarios = () => {
                 </Button>
             </div>
 
-            <div >
+            <div className="overflow-x-auto">
                 <Table
                     dataSource={locatarios || []}
                     loading={loadingLocatarios}
                     rowKey={"id"}
+                    scroll={{ x: 800 }}
                 >
                     <Table.Column
                         title="Nome"
@@ -111,8 +117,9 @@ const Locatarios = () => {
                     <Table.Column
                         title="Ações"
                         className="w-25"
+                        
                         render={(_, linha) => (
-                            <div className="flex gap-2">
+                            <div className="overflow-x-auto">
                                 <Button
                                     icon={<LuPencil />}
                                     onClick={() => abrirEditar(linha)}
@@ -144,6 +151,7 @@ const Locatarios = () => {
                 <Form
                     layout="vertical"
                     onFinish={criar}
+                    form={formCriar}
                 >
                     <Form.Item
                         label="Nome"

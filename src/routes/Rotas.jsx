@@ -8,6 +8,10 @@ import { useContext } from "react";
 import { AdminContext } from "../contexts/AdminProvider";
 import ImoveisTipo from "../pages/ImoveisTipo";
 import Locatarios from "../pages/Locatarios";
+import Imoveis from "../pages/Imoveis";
+import HistoricoManutencoes from "../pages/HistoricoManuntencao";
+import HistoricoImovel from "../pages/HistoricoImovel";
+import Usuario from "../pages/Usuarios";
 
 const Rotas = () => {
    const { token } = useContext(AdminContext);
@@ -22,6 +26,10 @@ const Rotas = () => {
                      <Route path="niveis" element={<Niveis />} />
                      <Route path="imoveis-tipo" element={<ImoveisTipo />} />
                      <Route path="locatarios" element={<Locatarios />} />
+                     <Route path="usuarios" element={<Usuario />} />
+                     <Route path="imoveis" element={<Imoveis />} />
+                     <Route path="historico-manutencoes" element={<HistoricoManutencoes />} />
+                     <Route path="historico-imovel" element={<HistoricoImovel />} />
                   </Route>
                )
             }

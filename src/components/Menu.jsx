@@ -12,11 +12,15 @@ const Menu = () => {
                     Tetos
                 </h1>
             </div>
-            <nav className="flex flex-col *:leading-10 *:font-semibold *:text-white! *:hover:bg-white/25! *:rounded *:duration-200! *:pl-4 *:[&.active]:bg-white/25! *:[&.active] ">
+           <nav className="flex flex-col mt-8 gap-2 *:leading-10 *:font-semibold *:text-white! *:hover:bg-white/25! *:rounded *:duration-200! *:pl-4 *:[&.active]:bg-white/25! *:[&.active] ">
                 <NavLink end to="/painel">Home</NavLink>
                 <NavLink end to="/painel/niveis">Niveis</NavLink>
-                <NavLink end to="/painel/imoveis-tipo">Imóveis Tipo</NavLink>
+                <NavLink end to="/painel/imoveis-tipo">Categorias</NavLink>
                 <NavLink end to="/painel/locatarios">Locatários</NavLink>
+                <NavLink end to="/painel/usuarios">Usuários</NavLink>
+                <NavLink end to="/painel/imoveis">Imoveis</NavLink>
+                <NavLink end to="/painel/historico-manutencoes">Manutenções</NavLink>
+                <NavLink end to="/painel/historico-imovel">Histórico Imóveis</NavLink>
             </nav>
         </header>
     );

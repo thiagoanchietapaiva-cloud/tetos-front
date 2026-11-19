@@ -75,7 +75,7 @@ const ImoveisTipo = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-4 flex-wrap">
 
                 <h2 className="text-3xl font-bold flex gap-2 items-center text-blue-900"><LuLayers />Tipos</h2>
                 <Button
@@ -91,6 +91,7 @@ const ImoveisTipo = () => {
                     dataSource={tipos || []}
                     loading={loadingImoveisTipo}
                     rowKey={"id"}
+                    scroll={{ x: 800 }}
                 >
                     <Table.Column
                         title="Nome"
