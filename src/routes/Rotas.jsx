@@ -7,6 +7,7 @@ import PageLayout from "../layouts/PageLayout";
 import { useContext } from "react";
 import { AdminContext } from "../contexts/AdminProvider";
 import ImoveisTipo from "../pages/ImoveisTipo";
+import Locatarios from "../pages/Locatarios";
 
 const Rotas = () => {
    const { token } = useContext(AdminContext);
@@ -20,6 +21,7 @@ const Rotas = () => {
                      <Route index element={<Home />} />
                      <Route path="niveis" element={<Niveis />} />
                      <Route path="imoveis-tipo" element={<ImoveisTipo />} />
+                     <Route path="locatarios" element={<Locatarios />} />
                   </Route>
                )
             }

@@ -77,7 +77,7 @@ const ImoveisTipo = () => {
         <div>
             <div className="flex justify-between items-center mb-4">
 
-                <h2 className="text-3xl font-bold flex gap-2 items-center text-blue-900"><LuLayers />Níveis</h2>
+                <h2 className="text-3xl font-bold flex gap-2 items-center text-blue-900"><LuLayers />Tipos</h2>
                 <Button
                     type="primary"
                     icon={<LuPlus />}
@@ -138,7 +138,7 @@ const ImoveisTipo = () => {
                         name="nome"
                         rules={[{ required: true, message: "Campo Obrigatorio" }]}
                     >
-                        <input placeholder="nome do nivel" />
+                        <input placeholder="nome do Tipo" />
 
                     </Form.Item>
                     <div className="flex justify-end">
