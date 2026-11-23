@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { AXIOS, QUERYCLIENT } from "../services";
 
-export const useBuscarImoveis = () => {
+export const useBuscarImoveis = (query = false) => {
     return useQuery({
         queryKey: ["imoveis"],
         queryFn: async () => {
-            const res = await AXIOS.get("/imoveis");
+            const res = await AXIOS.get(query ? `/imoveis${query}`:"/imoveis");
             return res.data;
         }
     });
