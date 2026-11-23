@@ -3,7 +3,7 @@ import { LuImageOff, LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
 import { useBuscarImovel, useCriarImovel, useDeletarImovel, useEditarImovel } from "../hooks/imoveisHooks";
 import { useState } from "react";
 import { useBuscarImoveisTipo } from './../hooks/imoveisTipoHooks';
-import { useBuscarLocatario } from './../hooks/locatariosHooks';
+import { useBuscarLocatarios } from './../hooks/locatariosHooks';
 import { APIURL } from "../services";
 
 
@@ -14,7 +14,7 @@ const Imoveis = () => {
     const { notification } = App.useApp();
     const { data: imoveis, isLoading: loadingImovel } = useBuscarImovel("?tipo=true&locatario=true");
     const { data: tipos } = useBuscarImoveisTipo();
-    const { data: locatarios } = useBuscarLocatario();
+    const { data: locatarios } = useBuscarLocatarios();
     const { mutate: criarImovel, isLoading: loadingCriar } = useCriarImovel();
     const { mutate: editarImovel, isLoading: loadingEditar } = useEditarImovel();
     const { mutate: deletarImovel } = useDeletarImovel();
