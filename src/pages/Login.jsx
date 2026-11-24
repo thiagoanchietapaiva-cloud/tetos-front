@@ -61,6 +61,15 @@ const Login = () => {
                         className="w-full mt-4"
                         loading={loginPending}
                     >Enviar</Button>
+
+                    <div className="flex justify-center mt-4">
+                        <Button
+                            type="link"
+                            onClick={() => navigate("/cadastro")}
+                        >
+                            Não tem conta? Cadastre-se
+                        </Button>
+                    </div>
                 </Form>
             </div>
         </div>

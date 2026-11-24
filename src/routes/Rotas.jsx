@@ -12,6 +12,7 @@ import Imoveis from "../pages/Imoveis";
 import HistoricoManutencoes from "../pages/HistoricoManuntencao";
 import HistoricoImovel from "../pages/HistoricoImovel";
 import Usuario from "../pages/Usuarios";
+import Cadastro from "../pages/Cadastro";
 
 const Rotas = () => {
    const { token } = useContext(AdminContext);
@@ -19,6 +20,7 @@ const Rotas = () => {
       <BrowserRouter>
          <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/cadastro" element={<Cadastro />} />
             {
                token && (
                   <Route path="/painel" element={<RotaProtegida><PageLayout /></RotaProtegida>}>
