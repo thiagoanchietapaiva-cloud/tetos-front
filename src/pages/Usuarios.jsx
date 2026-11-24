@@ -118,7 +118,7 @@ const Usuarios = () => {
                             <div className="flex gap-2">
                                 <Button
                                     icon={<LuPencil />}
-                                    type="primary"
+                                    
                                     onClick={() => {
                                         formEditar.setFieldValue("id", linha.id);
                                         formEditar.setFieldValue("nome", linha.nome);
@@ -136,7 +136,7 @@ const Usuarios = () => {
                                 >
                                     <Button
                                         icon={<LuTrash2 />}
-                                        type="primary"
+                                        
                                     />
                                 </Popconfirm>
                             </div>
@@ -193,7 +193,7 @@ const Usuarios = () => {
                     </Form.Item>
                     <div className="flex justify-end">
                         <Button
-                            type="primary"
+                            
                             htmlType="submit"
                             loading={loadingCriar}
                         >

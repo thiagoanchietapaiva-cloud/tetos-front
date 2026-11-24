@@ -1,7 +1,7 @@
 import { App, Button, Drawer, Form, Popconfirm, Table } from "antd";
 import { LuPencil, LuPlus, LuTrash, LuWrench } from "react-icons/lu";
 import { useBuscarHistoricoManutencoes, useCriarHistoricoManutencoes, useDeletarHistoricoManutencoes, useEditarHistoricoManutencoes } from "../hooks/historicoManutencoesHooks";
-import { useBuscarImoveis } from "../hooks/imoveisHooks";
+import { useBuscarImovel } from "../hooks/imoveisHooks";
 import { useState } from "react";
 
 const HistoricoManutencoes = () => {
@@ -9,7 +9,7 @@ const HistoricoManutencoes = () => {
     const [monstrarCriar, setMostrarCriar] = useState(false);
     const { notification } = App.useApp();
     const { data: manutencoes, isLoading: loadingManutencoes } = useBuscarHistoricoManutencoes();
-    const { data: imoveis } = useBuscarImoveis();
+    const { data: imoveis } = useBuscarImovel();
     const { mutate: criarManutencoes, isLoading: loadingCriar } = useCriarHistoricoManutencoes();
     const { mutate: deletarManutencoes } = useDeletarHistoricoManutencoes();
     const { mutate: editarManutencoes, isLoading: loadingEditar } = useEditarHistoricoManutencoes();

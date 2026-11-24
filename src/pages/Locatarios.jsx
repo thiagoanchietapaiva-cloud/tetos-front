@@ -119,7 +119,7 @@ const Locatarios = () => {
                         className="w-25"
                         
                         render={(_, linha) => (
-                            <div className="overflow-x-auto">
+                            <div className="flex gap-2">
                                 <Button
                                     icon={<LuPencil />}
                                     onClick={() => abrirEditar(linha)}

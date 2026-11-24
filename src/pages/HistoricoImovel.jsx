@@ -1,7 +1,7 @@
 import { App, Button, Drawer, Form, Popconfirm, Table } from "antd";
 import { LuHistory, LuPencil, LuPlus, LuTrash } from "react-icons/lu";
 import { useBuscarHistoricoImovel, useCriarHistoricoImovel, useDeletarHistoricoImovel, useEditarHistoricoImovel } from "../hooks/historicoImovelHooks";
-import { useBuscarImoveis } from "../hooks/imoveisHooks";
+import { useBuscarImovel } from "../hooks/imoveisHooks";
 import { useBuscarLocatarios } from "../hooks/locatariosHooks";
 import { useState } from "react";
 
@@ -10,7 +10,7 @@ const HistoricoImovel = () => {
     const [monstrarCriar, setMostrarCriar] = useState(false);
     const { notification } = App.useApp();
     const { data: historicos, isLoading: loadingHistoricos } = useBuscarHistoricoImovel();
-    const { data: imoveis } = useBuscarImoveis();
+    const { data: imoveis } = useBuscarImovel();
     const { data: locatarios } = useBuscarLocatarios();
     const { mutate: criarHistorico, isLoading: loadingCriar } = useCriarHistoricoImovel();
     const { mutate: deletarHistorico } = useDeletarHistoricoImovel();
