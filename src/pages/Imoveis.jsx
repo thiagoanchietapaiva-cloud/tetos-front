@@ -14,25 +14,37 @@ const Imoveis = () => {
     const { data: imoveis, isLoading: loadingImovel } = useBuscarImovel("?tipo=true&locatario=true");
     const { data: tipos } = useBuscarImoveisTipo();
     const { data: locatarios } = useBuscarLocatarios();
-    const { mutate: criarImovel, isLoading: loadingCriar } = useCriarImovel();
-    const { mutate: editarImovel, isLoading: loadingEditar } = useEditarImovel();
+    const { mutate: criarImovel, isPending: loadingCriar } = useCriarImovel();
+    const { mutate: editarImovel, isPending: loadingEditar } = useEditarImovel();
     const { mutate: deletarImovel } = useDeletarImovel();
+    const [formCriar] = Form.useForm();
     const [formEditar] = Form.useForm();
     const [imovelParaEditar, setImovelParaEditar] = useState(null);
+
+    function mostrarNotificacao(type, description) {
+        const mostrar = notification[type] || notification.error;
+        mostrar({
+            description: description || "Ocorreu um erro",
+            placement: "bottomRight"
+        });
+    }
+
+    function pegarErro(erro) {
+        return Array.isArray(erro?.response?.data)
+            ? erro.response.data[0]
+            : erro?.response?.data;
+    }
 
     function criar(dados) {
         criarImovel(dados, {
             onSuccess: ({ type, description }) => {
+                formCriar.resetFields();
                 setMostrarCriar(false);
-                notification[type]({
-                    description,
-                    placement: "bottomRight"
-                })
+                mostrarNotificacao(type || "success", description || "Imóvel criado com sucesso");
             },
-            onError: ({ response: { data: { type, description } } }) => {
-                notification[type]({
-                    description
-                });
+            onError: (erro) => {
+                const dadosErro = pegarErro(erro);
+                mostrarNotificacao(dadosErro?.type, dadosErro?.description || dadosErro?.message || erro?.message || "Erro ao criar imóvel");
             }
         })
     }
@@ -43,15 +55,11 @@ const Imoveis = () => {
             onSuccess: ({ type, description }) => {
                 setMostrarEditar(false);
                 setImovelParaEditar(null);
-                notification[type]({
-                    description,
-                    placement: "bottomRight"
-                })
+                mostrarNotificacao(type || "success", description || "Imóvel editado com sucesso");
             },
-            onError: ({ response: { data: { type, description } } }) => {
-                notification[type]({
-                    description
-                });
+            onError: (erro) => {
+                const dadosErro = pegarErro(erro);
+                mostrarNotificacao(dadosErro?.type, dadosErro?.description || dadosErro?.message || erro?.message || "Erro ao editar imóvel");
             }
         })
     }
@@ -59,6 +67,7 @@ const Imoveis = () => {
     function abrirEditar(linha) {
         setImovelParaEditar(linha);
         formEditar.setFieldsValue({
+            cep: linha.cep,
             logradouro: linha.logradouro,
             numero: linha.numero,
             complemento: linha.complemento,
@@ -68,8 +77,11 @@ const Imoveis = () => {
             quartos: linha.quartos,
             banheiros: linha.banheiros,
             garagens: linha.garagens,
+            suites: linha.suites,
+            metragem: linha.metragem,
+            valor_aluguel: linha.valor_aluguel,
             imagem: linha.imagem,
-            imoveis_tipo_id: linha.imoveis_tipo_id,
+            imoveis_tipo_id: linha.imoveis_tipo_id ?? linha.tipo_id,
             locatario_id: linha.locatario_id
         });
         setMostrarEditar(true);
@@ -78,21 +90,20 @@ const Imoveis = () => {
     function deletar(id) {
         deletarImovel(id, {
             onSuccess: ({ type, description }) => {
-                notification[type]({
-                    description,
-                    placement: "bottomRight"
-                })
+                mostrarNotificacao(type || "success", description || "Imóvel deletado com sucesso");
             },
-            onError: ({ response: { data: { type, description } } }) => {
-                notification[type]({
-                    description
-                });
+            onError: (erro) => {
+                const dadosErro = pegarErro(erro);
+                mostrarNotificacao(dadosErro?.type, dadosErro?.description || dadosErro?.message || erro?.message || "Erro ao deletar imóvel");
             }
         })
     }
 
     const camposForm = (
         <>
+            <Form.Item label="CEP" name="cep" rules={[{ required: true, message: "Campo obrigatório" }]}>
+                <Input placeholder="ex: 60000-000" maxLength={10} />
+            </Form.Item>
             <Form.Item label="Logradouro" name="logradouro" rules={[{ required: true, message: "Campo obrigatório" }]}>
                 <Input placeholder="ex: Rua cidade ecologica" />
             </Form.Item>
@@ -109,12 +120,21 @@ const Imoveis = () => {
                 <Input placeholder="ex: Fortaleza" />
             </Form.Item>
             <Form.Item label="Estado" name="estado" rules={[{ required: true, message: "Campo obrigatório" }]}>
-                <Input placeholder="ex: CE" />
+                <Input placeholder="ex: CE" maxLength={2} />
+            </Form.Item>
+            <Form.Item label="Valor do aluguel" name="valor_aluguel" rules={[{ required: true, message: "Campo obrigatório" }]}>
+                <Input type="number" step="0.01" placeholder="ex: 1500.00" />
+            </Form.Item>
+            <Form.Item label="Metragem (m²)" name="metragem" rules={[{ required: true, message: "Campo obrigatório" }]}>
+                <Input type="number" step="0.01" placeholder="ex: 65.5" />
             </Form.Item>
             <Form.Item label="Quartos" name="quartos" rules={[{ required: true, message: "Campo obrigatório" }]}>
                 <Input type="number" placeholder="ex: 2" />
             </Form.Item>
             <Form.Item label="Banheiros" name="banheiros" rules={[{ required: true, message: "Campo obrigatório" }]}>
+                <Input type="number" placeholder="ex: 1" />
+            </Form.Item>
+            <Form.Item label="Suítes" name="suites">
                 <Input type="number" placeholder="ex: 1" />
             </Form.Item>
             <Form.Item label="Garagens" name="garagens">
@@ -177,8 +197,18 @@ const Imoveis = () => {
                     <Table.Column
                         title="Endereço"
                         render={(_, linha) => (
-                            `${linha.logradouro} ${linha.numero} ${linha.complemento ? linha.complemento : ""}, ${linha.bairro}, ${linha.cidade}-${linha.estado}`
+                            `${linha.logradouro} ${linha.numero}${linha.complemento ? `, ${linha.complemento}` : ""}, ${linha.bairro}, ${linha.cidade}-${linha.estado}${linha.cep ? ` (${linha.cep})` : ""}`
                         )}
+                    />
+                    <Table.Column
+                        title="Aluguel"
+                        render={(_, linha) => linha.valor_aluguel != null ? `R$ ${Number(linha.valor_aluguel).toFixed(2)}` : "---"}
+                        align="center"
+                    />
+                    <Table.Column
+                        title="Metragem"
+                        render={(_, linha) => linha.metragem != null ? `${Number(linha.metragem)} m²` : "---"}
+                        align="center"
                     />
                     <Table.Column
                         title="Quartos"
@@ -202,7 +232,7 @@ const Imoveis = () => {
                     />
                     <Table.Column
                         title="Locatário"
-                        render={(_, linha) => (linha.locatario ? linha.locatario.nome : "Disponível")}
+                        render={(_, linha) => (linha.locatarios ? linha.locatarios.nome : "Disponível")}
                         align="center"
                     />
                     <Table.Column
@@ -212,7 +242,6 @@ const Imoveis = () => {
                             <div className="flex gap-2">
                                 <Button
                                     icon={<LuPencil />}
-                                    
                                     onClick={() => abrirEditar(linha)}
                                 />
                                 <Popconfirm
@@ -224,7 +253,6 @@ const Imoveis = () => {
                                 >
                                     <Button
                                         icon={<LuTrash2 />}
-                                        
                                     />
                                 </Popconfirm>
                             </div>
@@ -241,6 +269,7 @@ const Imoveis = () => {
                 <Form
                     layout="vertical"
                     onFinish={criar}
+                    form={formCriar}
                 >
                     {camposForm}
                     <div className="flex justify-end">
