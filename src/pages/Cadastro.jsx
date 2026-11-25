@@ -1,18 +1,21 @@
-import { App, Button, Form, Input, Select } from "antd";
+import { App, Button, Form, Input } from "antd";
 import { useNavigate } from "react-router";
-import { useCriarUsuario } from "../hooks/usuarioHooks";
-import { useBuscarNiveis } from "../hooks/niveisHooks";
+import { useCadastrar } from "../hooks/usuarioHooks";
 
 const Cadastro = () => {
 
     const navigate = useNavigate();
     const { notification } = App.useApp();
-    const { data: niveis = [] } = useBuscarNiveis();
-    const { mutate: criarUsuario, isPending: criarPending } = useCriarUsuario();
+    const { mutate: criarUsuario, isPending: criarPending } = useCadastrar();
     const [form] = Form.useForm();
 
     function cadastrar(dados) {
-        criarUsuario(dados, {
+        const dadosComNivel = {
+            ...dados,
+            nivel_id: "2d6f3d25-78a5-4fa2-9091-6bc4d2036b2f"
+        };
+
+        criarUsuario(dadosComNivel, {
             onSuccess: ({ type, description }) => {
                 notification[type]({ description });
                 if (type == "success") {
@@ -60,22 +63,6 @@ const Cadastro = () => {
                         rules={[{ required: true, message: "Campo obrigatório" }]}
                     >
                         <Input.Password placeholder="**********" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Nível"
-                        name="nivel_id"
-                        rules={[{ required: true, message: "Campo obrigatório" }]}
-                    >
-                        <Select
-                            placeholder="Escolha um nível"
-                            options={(niveis || []).map(nivel => {
-                                return {
-                                    label: nivel.nome,
-                                    value: nivel.id
-                                }
-                            })}
-                        />
                     </Form.Item>
 
                     <Button

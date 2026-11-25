@@ -62,3 +62,11 @@ export const useDeletarUsuario = () => {
         }
     })
 }
+export const useCadastrar = () => {
+    return useMutation({
+        mutationFn: async (dados) => {
+            const res = await AXIOS.post("/cadastrar", dados);
+            return res.data;
+        },
+    })
+}
