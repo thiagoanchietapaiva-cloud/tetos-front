@@ -6,6 +6,7 @@ import { useBuscarImovel } from "../hooks/imoveisHooks";
 import { useBuscarLocatarios } from "../hooks/locatariosHooks";
 import { useBuscarHistoricoImovel } from "../hooks/historicoImovelHooks";
 import { useBuscarUsuario } from "../hooks/usuarioHooks";
+import { useBuscarImoveisTipo } from "../hooks/imoveisTipoHooks";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -15,6 +16,12 @@ const Home = () => {
   const { data: locatarios, isLoading: carregandoLocatarios } = useBuscarLocatarios();
   const { data: historicos, isLoading: carregandoHistoricos } = useBuscarHistoricoImovel();
   const { data: usuarios, isLoading: carregandoUsuarios } = useBuscarUsuario();
+  const { data: tipos } = useBuscarImoveisTipo();
+
+  const mapaTipos = {};
+  (tipos || []).forEach((t) => {
+    mapaTipos[t.id] = t.nome;
+  });
 
   function nomeImovel(id) {
     const imovel = imoveis?.find((i) => i.id === id);
@@ -49,7 +56,7 @@ const Home = () => {
   const contarPorTipo = () => {
     const contagem = {};
     (imoveis || []).forEach((item) => {
-      const tipo = item.tipo?.nome || item.imoveis_tipo?.nome || item.nome_tipo || item.tipo || "Sem tipo";
+      const tipo = mapaTipos[item.tipo_id] || item.tipo?.nome || item.imoveis_tipo?.nome || "Sem tipo";
       contagem[tipo] = (contagem[tipo] || 0) + 1;
     });
     return Object.entries(contagem);

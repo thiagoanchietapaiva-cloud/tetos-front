@@ -1,5 +1,5 @@
 import { App, Button, Drawer, Form, Image, Input, Popconfirm, Select, Table } from "antd";
-import { LuImageOff, LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
+import { LuHouse, LuImageOff, LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
 import { useBuscarImovel, useCriarImovel, useDeletarImovel, useEditarImovel } from "../hooks/imoveisHooks";
 import { useState } from "react";
 import { useBuscarImoveisTipo } from './../hooks/imoveisTipoHooks';
@@ -163,7 +163,10 @@ const Imoveis = () => {
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-3xl font-bold">Imóveis</h2>
+                <h2 className="text-3xl font-bold">
+                    <LuHouse />
+                    Imóveis
+                    </h2>
                 <Button
                     type="primary"
                     icon={<LuPlus />}
