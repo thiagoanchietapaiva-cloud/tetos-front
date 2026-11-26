@@ -1,5 +1,5 @@
 import { App, Button, Drawer, Form, Input, Popconfirm, Select, Table } from "antd";
-import { LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
+import { LuHouse, LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
 import { useBuscarUsuario, useCriarUsuario, useDeletarUsuario, useEditarUsuario } from "../hooks/usuarioHooks";
 import { useState } from "react";
 import { useBuscarNiveis } from "../hooks/niveisHooks";
@@ -85,7 +85,7 @@ const Usuarios = () => {
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-3xl font-bold">
+                <h2 className="text-3xl font-bold flex gap-2 items-center text-blue-900">
                     <LuHouse />
                     Usuários
                     </h2>
